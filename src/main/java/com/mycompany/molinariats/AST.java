@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package com.mycompany.molinariats;
-
+import file.TextFile;
+import java.io.IOException;
+import java.util.*;
 import javax.swing.text.html.HTML;
+import java.time.LocalDate;
 
 /**
  *
@@ -13,39 +16,136 @@ import javax.swing.text.html.HTML;
  */
 public class AST 
 {
+    private int testTotali=0;
+    static boolean tesPersona;
     private Test[] elencoTest;
     private int testPresenti=0;
     private final int N_MAX_TEST=100;
-    
+    Scanner tastiera=new Scanner(System.in);
     public AST()
     {
         elencoTest=new Test[N_MAX_TEST];
     }
     public int aggiungiTest(Test t)
     {
+        int i=0;
+        if(testPresenti<0||testPresenti>100)
+        {
+            System.out.println("il numero di test effettuati è sopra la soglia massima.");
+            return i=-1;//test non inserito
+        }
         elencoTest[testPresenti]=new Test(t);
         testPresenti++;
-        return 0;
+        testTotali ++;
+        return i;//test inserito correttamente
     }
     public int eliminaTest(String codiceFiscaleDaCercare)
     {
         int rimozioneOk=-1;
+        int y=0;
         for (int i=0; i<testPresenti;i++)
         {
-            if(codiceFiscaleDaCercare==elencoTest[i].getCodiceFiscale())
+            if(codiceFiscaleDaCercare.compareToIgnoreCase(elencoTest[i].getCodiceFiscale())==0)
             {
-                aggiornaPosizioneTest(i);
-                rimozioneOk=0;
+                System.out.println(testPersona(elencoTest[i].getCodiceFiscale()));
+                System.out.println("inserisci il codiceID del test da eliminare: ");
+                y=tastiera.nextInt();
+                for(int z=0;z<testPresenti;z++)
+                {
+                    if(y==elencoTest[z].getCodiceID())
+                    {
+                        aggiornaPosizioneTest(z);
+                        rimozioneOk=0;
+                        return rimozioneOk;
+                    }
+                }  
             }
         }
         return rimozioneOk;
     }
     private void aggiornaPosizioneTest(int posizione)
     {
-        for (int i=0; i<testPresenti-2;i++)
+        for (int i=posizione; i<testPresenti-1;i++)
         {
            elencoTest[i]=elencoTest[i+1]; 
         }
         testPresenti--;
+    }
+    public String testPersona(String codiceFiscaleDaCercare)
+    {
+        String s = null;
+        if(testPresenti<=0)
+        {
+            s="nessun test ancora effettuato.";
+        }
+        
+        for (int i=0; i<testPresenti;i++)
+        {
+            if(i==0)
+            {
+                if(codiceFiscaleDaCercare.compareToIgnoreCase(elencoTest[i].getCodiceFiscale())==0)
+                {
+                    s=(elencoTest[i].getData()+", "+elencoTest[i].getCodiceID()+", "+elencoTest[i].getEsito()+"\n");
+                }
+                continue;
+            }
+            if(codiceFiscaleDaCercare.compareToIgnoreCase(elencoTest[i].getCodiceFiscale())==0)
+            {
+                s+=(elencoTest[i].getData()+", "+elencoTest[i].getCodiceID()+", "+elencoTest[i].getEsito()+"\n");
+            }
+        }
+        return s;
+    }
+    public int nTestFatti()
+    {
+        return testTotali;
+    }
+    public String positiviData(LocalDate dataCercata)
+    {
+        String s = null;
+        int x=0;
+        Test[] testPositivi;
+        testPositivi=new Test[N_MAX_TEST];
+        for(int i=0;i<testPresenti;i++)
+        {
+            if(dataCercata.isEqual(elencoTest[i].getData()))
+            {
+                if(elencoTest[i].getEsito()=="positivo")
+                {
+                    testPositivi[x]=elencoTest[i];
+                    x++;
+                }
+
+            }
+        }
+        testPositivi=Ordinatore.ordinaTest(testPositivi);
+        for(int i=0;i<x;i++)
+        {
+            if(i==0)
+            {
+                s=testPositivi[i].getCognome()+" ,"+testPositivi[i].getNome()+" ,"+testPositivi[i].getCodiceFiscale()+" ,"+testPositivi[i].getData()+" ,"+testPositivi[i].getCodiceID()+" ,"+testPositivi[i].getEsito()+"\n";
+                continue;
+            }
+            s+=testPositivi[i].getCognome()+" ,"+testPositivi[i].getNome()+" ,"+testPositivi[i].getCodiceFiscale()+" ,"+testPositivi[i].getData()+" ,"+testPositivi[i].getCodiceID()+" ,"+testPositivi[i].getEsito()+"\n";
+        }
+        if(s==null)
+        {
+            s="nessun test di quella data è presente";
+        }
+        return s;
+    }
+    public void salvaTest(String nomeFile) throws IOException
+    {
+        TextFile f1=new TextFile(nomeFile,'W');
+        Test test;
+        for(int i=0;i<testPresenti;i++)
+        {
+            test=elencoTest[i];
+            if(test!=null)
+            {
+                f1.toFile(elencoTest[i].getCognome()+";"+elencoTest[i].getNome()+";"+elencoTest[i].getCodiceFiscale()+";"+elencoTest[i].getData()+";"+elencoTest[i].getCodiceID()+";"+elencoTest[i].getEsito()+"\n");
+            }
+        }
+        f1.close();
     }
 }
