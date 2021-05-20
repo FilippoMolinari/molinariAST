@@ -38,6 +38,15 @@ public class Test
         setData(t.getData().getDayOfMonth(), t.getData().getMonthValue(),t.getData().getYear());
         setEsito(t.esito);
     }
+    public Test()
+    {
+        this.nome=null;
+        this.cognome=null;
+        this.codiceFiscale=null;
+        this.codiceID=0;
+        this.esito=null;
+        this.data=LocalDate.now();
+    }
     public int getCodiceID() 
     {
         return codiceID;

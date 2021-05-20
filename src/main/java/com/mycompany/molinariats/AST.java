@@ -4,8 +4,13 @@
  * and open the template in the editor.
  */
 package com.mycompany.molinariats;
+import eccezioni.*;
+import eccezioni.FileException;
 import file.TextFile;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import javax.swing.text.html.HTML;
 import java.time.LocalDate;
@@ -134,7 +139,7 @@ public class AST
         }
         return s;
     }
-    public void salvaTest(String nomeFile) throws IOException
+    public void salvaTest(String nomeFile) throws IOException, FileException, eccezionePosizioneNonValida
     {
         TextFile f1=new TextFile(nomeFile,'W');
         Test test;
@@ -148,4 +153,23 @@ public class AST
         }
         f1.close();
     }
+    public void salvaTestBinario(String nomeFile) throws IOException, eccezionePosizioneNonValida, FileException
+    {
+        FileOutputStream f1=new FileOutputStream(nomeFile);
+        ObjectOutputStream writer=new ObjectOutputStream(f1);
+        writer.writeObject(this);
+        writer.flush();
+        writer.close();   
+    }
+
+    public int getTestPresenti() 
+    {
+        return testPresenti;
+    }
+
+    public int getN_MAX_TEST() 
+    {
+        return N_MAX_TEST;
+    }
+    
 }

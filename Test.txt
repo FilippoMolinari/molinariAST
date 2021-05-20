@@ -1,0 +1,8 @@
+b;b;a;2025-03-01;3;positivo
+
+a;a;a;2025-03-01;5;positivo
+
+d;d;b;2025-04-01;2;positivo
+
+c;c;c;2025-03-01;0;positivo
+
