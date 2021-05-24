@@ -7,6 +7,7 @@ package com.mycompany.molinariats;
 import eccezioni.FileException;
 import eccezioni.eccezionePosizioneNonValida;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -180,8 +181,7 @@ public class Main implements Serializable
                     }
                     catch(IOException e1)
                     {
-                        System.out.println("impossibile salvare i dati sul file");
-                        break;
+                         System.out.println("impossibile salvare i dati sul file");
                     }
                     break;
                 }

@@ -5,11 +5,13 @@
  */
 package com.mycompany.molinariats;
 
+import java.io.Serializable;
+
 /**
  *
  * @author filip
  */
-public class Ordinatore 
+public class Ordinatore implements Serializable
 {
         
     

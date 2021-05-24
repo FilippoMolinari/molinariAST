@@ -7,13 +7,11 @@ package com.mycompany.molinariats;
 import eccezioni.*;
 import eccezioni.FileException;
 import file.TextFile;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
-import javax.swing.text.html.HTML;
 import java.time.LocalDate;
 
 /**
@@ -68,6 +66,7 @@ public class AST implements Serializable
      */
     public int eliminaTest(String codiceFiscaleDaCercare)throws InputMismatchException
     {
+        
         int rimozioneOk=-1;
         int y=0;
         for (int i=0; i<testPresenti;i++)
@@ -75,6 +74,7 @@ public class AST implements Serializable
             if(codiceFiscaleDaCercare.compareToIgnoreCase(elencoTest[i].getCodiceFiscale())==0)
             {
                 System.out.println(testPersona(elencoTest[i].getCodiceFiscale()));
+                tastiera.nextLine();
                 System.out.println("inserisci il codiceID del test da eliminare: ");
                 y=tastiera.nextInt();
                 for(int z=0;z<testPresenti;z++)
@@ -155,7 +155,7 @@ public class AST implements Serializable
         {
             if(dataCercata.isEqual(elencoTest[i].getData()))
             {
-                if(elencoTest[i].getEsito()=="positivo")
+                if(elencoTest[i].getEsito().compareToIgnoreCase("positivo")==0)
                 {
                     testPositivi[x]=elencoTest[i];
                     x++;

@@ -5,13 +5,14 @@
  */
 package com.mycompany.molinariats;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
  *
  * @author filip
  */
-public class Menu 
+public class Menu implements Serializable
 {
     private String[] elencoVoci;
     private int numeroVoci;
