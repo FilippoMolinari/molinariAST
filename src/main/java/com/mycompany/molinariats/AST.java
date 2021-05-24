@@ -11,15 +11,22 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 import javax.swing.text.html.HTML;
 import java.time.LocalDate;
 
 /**
- *
+ * la classe AST contiene e gestisce un array di oggetti della classe test
+ * i suoi attributi sono:
+ * int testTotali=0;
+ * boolean tesPersona;
+ * Test[] elencoTest;
+ * int testPresenti=0;
+ * final int N_MAX_TEST=100;
  * @author filip
  */
-public class AST 
+public class AST implements Serializable
 {
     private int testTotali=0;
     static boolean tesPersona;
@@ -27,11 +34,20 @@ public class AST
     private int testPresenti=0;
     private final int N_MAX_TEST=100;
     Scanner tastiera=new Scanner(System.in);
+    /**
+     * costruttore della classe AST
+     */
     public AST()
     {
         elencoTest=new Test[N_MAX_TEST];
     }
-    public int aggiungiTest(Test t)
+    /**
+     * permette di aggiungere un oggetto della classe test
+     * @param t
+     * @return
+     * @throws InputMismatchException 
+     */
+    public int aggiungiTest(Test t)throws InputMismatchException
     {
         int i=0;
         if(testPresenti<0||testPresenti>100)
@@ -44,7 +60,13 @@ public class AST
         testTotali ++;
         return i;//test inserito correttamente
     }
-    public int eliminaTest(String codiceFiscaleDaCercare)
+    /**
+     * permette di eliminare un oggetto della classe test
+     * @param codiceFiscaleDaCercare
+     * @return
+     * @throws InputMismatchException 
+     */
+    public int eliminaTest(String codiceFiscaleDaCercare)throws InputMismatchException
     {
         int rimozioneOk=-1;
         int y=0;
@@ -68,6 +90,10 @@ public class AST
         }
         return rimozioneOk;
     }
+    /**
+     * consente di aggiornare la posizione dei test all'interno dell'array elencoTest, durante l'esecuzione di eliminaTest
+     * @param posizione 
+     */
     private void aggiornaPosizioneTest(int posizione)
     {
         for (int i=posizione; i<testPresenti-1;i++)
@@ -76,10 +102,15 @@ public class AST
         }
         testPresenti--;
     }
+    /**
+     * permette di visualizzare tutti i test svolti da una determinata persona
+     * @param codiceFiscaleDaCercare
+     * @return 
+     */
     public String testPersona(String codiceFiscaleDaCercare)
     {
         String s = null;
-        if(testPresenti<=0)
+        if(testPresenti<0)
         {
             s="nessun test ancora effettuato.";
         }
@@ -101,10 +132,19 @@ public class AST
         }
         return s;
     }
+    /**
+     * permette di visualizzare il numero di test svolti complessivamente dall'AST
+     * @return 
+     */
     public int nTestFatti()
     {
         return testTotali;
     }
+    /**
+     * permette di visualizzare tutti i test svolti in una determinata data
+     * @param dataCercata
+     * @return 
+     */
     public String positiviData(LocalDate dataCercata)
     {
         String s = null;
@@ -139,6 +179,13 @@ public class AST
         }
         return s;
     }
+    /**
+     * permette di salvare i test svolti su un file CSV
+     * @param nomeFile
+     * @throws IOException
+     * @throws FileException
+     * @throws eccezionePosizioneNonValida 
+     */
     public void salvaTest(String nomeFile) throws IOException, FileException, eccezionePosizioneNonValida
     {
         TextFile f1=new TextFile(nomeFile,'W');
@@ -153,7 +200,12 @@ public class AST
         }
         f1.close();
     }
-    public void salvaTestBinario(String nomeFile) throws IOException, eccezionePosizioneNonValida, FileException
+    /**
+     * permette di salvare i test svolti su un file binario 
+     * @param nomeFile
+     * @throws IOException 
+     */
+    public void salvaTestBinario(String nomeFile) throws IOException
     {
         FileOutputStream f1=new FileOutputStream(nomeFile);
         ObjectOutputStream writer=new ObjectOutputStream(f1);
@@ -161,12 +213,18 @@ public class AST
         writer.flush();
         writer.close();   
     }
-
+    /**
+     * restituisce il numero di test presenti all'interno dell'array
+     * @return 
+     */
     public int getTestPresenti() 
     {
         return testPresenti;
     }
-
+    /**
+     * restituisce il numero massimo di test inseribili
+     * @return 
+     */
     public int getN_MAX_TEST() 
     {
         return N_MAX_TEST;

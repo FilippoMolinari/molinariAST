@@ -9,6 +9,7 @@ import eccezioni.eccezionePosizioneNonValida;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ import java.time.LocalDate;
  *
  * @author filip
  */
-public class Main 
+public class Main implements Serializable
 {
     public static void main(String[] args) 
     {
@@ -70,38 +71,55 @@ public class Main
                 }
                 case 1:
                 {
-                    System.out.println("inserisci il nome dell'utente:");
-                    nome=tastiera.nextLine();
-                    System.out.println("inserisci il cognome dell'utente:");
-                    cognome=tastiera.nextLine();
-                    System.out.println("inserisci il codice fiscale dell'utente:");
-                    codiceFiscale=tastiera.nextLine();
-                    System.out.println("inserisci il giorno in cui è stato effettuato il test:");
-                    giorno=tastiera.nextInt();
-                    System.out.println("inserisci il mese in cui è stato effettuato il test:");
-                    mese=tastiera.nextInt();
-                    System.out.println("inserisci l'anno in cui è stato effettuato il test:");
-                    anno=tastiera.nextInt();
-                    codiceID++;
-                    tastiera.nextLine();
-                    System.out.println("inserisci l'esito del test:");
-                    esito=tastiera.nextLine();
-                    test=new Test(codiceID,nome,cognome,codiceFiscale,esito,giorno,mese,anno);
-                    a.aggiungiTest(test);
+                    try
+                    {   
+                        System.out.println("inserisci il nome dell'utente:");
+                        nome=tastiera.nextLine();
+                        System.out.println("inserisci il cognome dell'utente:");
+                        cognome=tastiera.nextLine();
+                        System.out.println("inserisci il codice fiscale dell'utente:");
+                        codiceFiscale=tastiera.nextLine();
+                        System.out.println("inserisci il giorno in cui è stato effettuato il test:");
+                        giorno=tastiera.nextInt();
+                        System.out.println("inserisci il mese in cui è stato effettuato il test:");
+                        mese=tastiera.nextInt();
+                        System.out.println("inserisci l'anno in cui è stato effettuato il test:");
+                        anno=tastiera.nextInt();
+                        codiceID++;
+                        tastiera.nextLine();
+                        System.out.println("inserisci l'esito del test:");
+                        esito=tastiera.nextLine();
+                        test=new Test(codiceID,nome,cognome,codiceFiscale,esito,giorno,mese,anno);
+                        a.aggiungiTest(test);
+                    }
+                    catch(InputMismatchException e1)
+                    {
+                        System.out.println("inserire un valore numerico");
+                        break;
+                    }
                     break;
                 }
                 case 2:
                 {
-                    System.out.println("inserisci il codice fiscale dell'utente che si vuole eliminare:");
-                    codiceFiscale=tastiera.nextLine();
-                    a.eliminaTest(codiceFiscale);  
+                    try
+                    {
+                        System.out.println("inserisci il codice fiscale dell'utente che si vuole eliminare:");
+                        codiceFiscale=tastiera.nextLine();
+                        a.eliminaTest(codiceFiscale);
+                    }
+                    catch(InputMismatchException e1)
+                    {
+                        System.out.println("inserire un valore numerico");
+                        break;
+                    }
                     break;
+                    
                 }
                 case 3:
                 {
                     System.out.println("inserisci il codice fiscale dell'utente che si vuole cercare:");
                     codiceFiscale=tastiera.nextLine();
-                    a.testPersona(codiceFiscale);
+                    System.out.println(a.testPersona(codiceFiscale));
                     break;
                 }
                 case 4:
@@ -111,14 +129,22 @@ public class Main
                 }
                 case 5:
                 {
-                    System.out.println("inserisci il giorno in cui è stato effettuato il test:");
-                    giorno=tastiera.nextInt();
-                    System.out.println("inserisci il mese in cui è stato effettuato il test:");
-                    mese=tastiera.nextInt();
-                    System.out.println("inserisci l'anno in cui è stato effettuato il test:");
-                    anno=tastiera.nextInt();
-                    dataCercata=LocalDate.of(anno, mese, giorno);
-                    System.out.println("i test svolti nella data indicata sono: \n"+a.positiviData(dataCercata));
+                    try
+                    {
+                        System.out.println("inserisci il giorno in cui è stato effettuato il test:");
+                        giorno=tastiera.nextInt();
+                        System.out.println("inserisci il mese in cui è stato effettuato il test:");
+                        mese=tastiera.nextInt();
+                        System.out.println("inserisci l'anno in cui è stato effettuato il test:");
+                        anno=tastiera.nextInt();
+                        dataCercata=LocalDate.of(anno, mese, giorno);
+                        System.out.println("i test svolti nella data indicata sono: \n"+a.positiviData(dataCercata));
+                    }
+                    catch(InputMismatchException e1)
+                    {
+                        System.out.println("inserire un valore numerico");
+                        break;
+                    }
                     break;
                 }
                 case 6:
@@ -131,14 +157,17 @@ public class Main
                     catch(IOException e1)
                     {
                         System.out.println("impossibile salvare i dati sul file");
+                        break;
                     }
                     catch(FileException e2)
                     {
                         System.out.println(e2.toString());
+                        break;
                     }
                     catch(eccezionePosizioneNonValida e1)
                     {
                         System.out.println("La posizione non è valida");
+                        break;
                     }
                     break;
                 }
@@ -152,24 +181,12 @@ public class Main
                     catch(IOException e1)
                     {
                         System.out.println("impossibile salvare i dati sul file");
-                    }
-                    catch(FileException e2)
-                    {
-                        System.out.println(e2.toString());
-                    } 
-                    catch(eccezionePosizioneNonValida e1)
-                    {
-                        System.out.println("La posizione non è valida");
+                        break;
                     }
                     break;
-                    
                 }
             }
         }while(sceltaUtente!=0);
-        //System.out.println(a.testPersona("a"));
-        //System.out.println(a.nTestFatti());
-        //System.out.println(a.positiviData(dataCercata));
-        //a.salvaTest("Test.txt");
         
     }
 }
